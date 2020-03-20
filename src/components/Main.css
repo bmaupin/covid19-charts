@@ -1,0 +1,7 @@
+.Main {
+  display: flex;
+  /* Center items horizontally */
+  justify-content: center;
+
+  padding: 2em;
+}

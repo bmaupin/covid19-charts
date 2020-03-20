@@ -1,7 +1,7 @@
 import React from 'react';
 import { Alignment, Button, Navbar } from '@blueprintjs/core';
 
-export default function Header() {
+function Header() {
   return (
     <header>
       <Navbar className="bp3-dark">
@@ -19,3 +19,5 @@ export default function Header() {
     </header>
   );
 }
+
+export default Header;
