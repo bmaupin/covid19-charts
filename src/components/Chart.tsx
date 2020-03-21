@@ -21,6 +21,7 @@ function Chart() {
       const newChartData = await ChartDataHelper.getData(
         ChartTypes.Top,
         ChartAttributes.Confirmed,
+        10,
         10
       );
 
