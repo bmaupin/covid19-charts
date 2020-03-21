@@ -9,7 +9,7 @@ import {
 
 function Chart() {
   const axes = [
-    { primary: true, type: 'linear', position: 'bottom' },
+    { primary: true, type: 'time', position: 'bottom' },
     { type: 'linear', position: 'left' },
   ];
 
