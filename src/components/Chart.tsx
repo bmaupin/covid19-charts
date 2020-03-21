@@ -42,7 +42,7 @@ function Chart() {
       }}
     >
       {/* The axes won't show correctly if the chart is rendered before the data is loaded */}
-      {isDataLoaded && <ReactChart data={chartData} axes={axes} />}
+      {isDataLoaded && <ReactChart data={chartData} axes={axes} tooltip />}
     </div>
   );
 }
