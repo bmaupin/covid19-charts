@@ -1,40 +1,35 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Chart as ReactChart } from 'react-charts';
+import {
+  ChartAttributes,
+  ChartDataHelper,
+  ChartTypes,
+  ChartData,
+} from '../helpers/ChartDataHelper';
 
 function Chart() {
-  const data = React.useMemo(
-    () => [
-      {
-        label: 'Series 1',
-        data: [
-          [0, 1],
-          [1, 2],
-          [2, 4],
-          [3, 2],
-          [4, 7],
-        ],
-      },
-      {
-        label: 'Series 2',
-        data: [
-          [0, 3],
-          [1, 1],
-          [2, 5],
-          [3, 6],
-          [4, 4],
-        ],
-      },
-    ],
-    []
-  );
+  const axes = [
+    { primary: true, type: 'linear', position: 'bottom' },
+    { type: 'linear', position: 'left' },
+  ];
 
-  const axes = React.useMemo(
-    () => [
-      { primary: true, type: 'linear', position: 'bottom' },
-      { type: 'linear', position: 'left' },
-    ],
-    []
-  );
+  const [chartData, setChartData] = useState<ChartData | null>(null);
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
+
+  useEffect(() => {
+    async function loadChartData() {
+      const newChartData = await ChartDataHelper.getData(
+        ChartTypes.Top,
+        ChartAttributes.Confirmed,
+        10
+      );
+
+      setChartData(newChartData);
+      setIsDataLoaded(true);
+    }
+
+    loadChartData();
+  }, []);
 
   return (
     // A react-chart hyper-responsively and continuously fills the available
@@ -45,7 +40,8 @@ function Chart() {
         height: '300px',
       }}
     >
-      <ReactChart data={data} axes={axes} />
+      {/* The axes won't show correctly if the chart is rendered before the data is loaded */}
+      {isDataLoaded && <ReactChart data={chartData} axes={axes} />}
     </div>
   );
 }
