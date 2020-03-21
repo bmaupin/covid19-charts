@@ -13,15 +13,14 @@ export enum ChartTypes {
   Top,
 }
 
-// TODO
-// interface ChartDatum {
-//   x: number;
-//   y: number;
-// }
+interface ChartDatum {
+  x: Date;
+  y: number;
+}
 
 interface ChartSeries {
   label: string;
-  data: number[][];
+  data: ChartDatum[];
 }
 
 export interface ChartData extends Array<ChartSeries> {}
@@ -100,12 +99,14 @@ export class ChartDataHelper {
       chartSeries.data = [];
 
       // TODO: this assumes the data will always be in order
-      // TODO: cleanup
-      // for (const countryData of apiData[country].slice(apiData[country].length - numDates, apiData[country].length))
-      for (let i = 0; i < numDates; i++) {
-        const countryData =
-          apiData[country][apiData[country].length - numDates - 1 + i];
-        chartSeries.data.push([i, countryData[chartAttribute]]);
+      for (const countryData of apiData[country].slice(
+        apiData[country].length - numDates,
+        apiData[country].length
+      )) {
+        chartSeries.data.push({
+          x: new Date(countryData.date),
+          y: countryData[chartAttribute],
+        });
       }
 
       chartData.push(chartSeries);
