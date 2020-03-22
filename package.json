@@ -17,11 +17,17 @@
     "react-scripts": "3.4.0",
     "typescript": "^3.7.5"
   },
+  "devDependencies": {
+    "gh-pages": "^2.2.0"
+  },
+  "homepage": "https://bmaupin.github.io/covid19-charts/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -m 'Auto commit from gh-pages [ci skip]' -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
