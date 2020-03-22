@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Chart as ReactChart } from 'react-charts';
 import {
-  ChartAttributes,
+  ChartMetrics,
   ChartDataHelper,
   ChartTypes,
   ChartData,
@@ -20,7 +20,7 @@ function Chart() {
     async function loadChartData() {
       const newChartData = await ChartDataHelper.getData(
         ChartTypes.Top,
-        ChartAttributes.Confirmed,
+        ChartMetrics.Confirmed,
         10,
         10
       );

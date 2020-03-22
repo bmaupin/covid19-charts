@@ -1,9 +1,9 @@
 const API_URL = 'https://pomber.github.io/covid19/timeseries.json';
 
-// TODO: is 'attribute the best term??
-// attribute, measurement, characteristic, variable, factor, statistic, measure
-// criterion, property, element
-export enum ChartAttributes {
+// TODO: is this the best term?
+// Alternatives: attribute, measurement, characteristic, variable, factor, statistic, measure,
+// criterion, property, element, metric, criteria
+export enum ChartMetrics {
   Confirmed = 'confirmed',
   Deaths = 'deaths',
   Recovered = 'recovered',
@@ -46,14 +46,14 @@ export class ChartDataHelper {
 
   static async getData(
     chartType: ChartTypes,
-    chartAttribute: ChartAttributes,
+    chartMetric: ChartMetrics,
     numCountries: number,
     numDates: number
   ): Promise<ChartData> {
     switch (chartType) {
       default:
         return await ChartDataHelper.getTopChartData(
-          chartAttribute,
+          chartMetric,
           numCountries,
           numDates
         );
@@ -61,20 +61,20 @@ export class ChartDataHelper {
   }
 
   static async getTopChartData(
-    chartAttribute: ChartAttributes,
+    chartMetric: ChartMetrics,
     numCountries: number,
     numDates: number
   ): Promise<ChartData> {
     const apiData = await ChartDataHelper.fetchData();
     const sortedCountries = await ChartDataHelper.getTopChartCountries(
       apiData,
-      chartAttribute,
+      chartMetric,
       numCountries
     );
     const chartData = ChartDataHelper.formatDataForChart(
       apiData,
       sortedCountries,
-      chartAttribute,
+      chartMetric,
       numDates
     );
 
@@ -87,7 +87,7 @@ export class ChartDataHelper {
   static formatDataForChart(
     apiData: ApiData,
     sortedCountries: Array<string>,
-    chartAttribute: ChartAttributes,
+    chartMetric: ChartMetrics,
     numDates: number
   ): ChartData {
     let chartData = [] as ChartData;
@@ -105,7 +105,7 @@ export class ChartDataHelper {
       )) {
         chartSeries.data.push({
           x: new Date(countryData.date),
-          y: countryData[chartAttribute],
+          y: countryData[chartMetric],
         });
       }
 
@@ -117,15 +117,15 @@ export class ChartDataHelper {
 
   static async getTopChartCountries(
     apiData: ApiData,
-    chartAttribute: ChartAttributes,
+    chartMetric: ChartMetrics,
     numCountries: number
   ): Promise<Array<string>> {
     const latestDate = apiData['Canada'][apiData['Canada'].length - 1].date;
 
     const sortedCountries = Object.keys(apiData).sort(function(a, b) {
       return (
-        apiData[b].find(item => item.date === latestDate)![chartAttribute] -
-        apiData[a].find(item => item.date === latestDate)![chartAttribute]
+        apiData[b].find(item => item.date === latestDate)![chartMetric] -
+        apiData[a].find(item => item.date === latestDate)![chartMetric]
       );
     });
 
