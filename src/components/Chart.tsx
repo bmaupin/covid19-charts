@@ -7,7 +7,11 @@ import {
   ChartData,
 } from '../helpers/ChartDataHelper';
 
-function Chart() {
+interface IProps {
+  chartMetric: ChartMetrics;
+}
+
+function Chart(props: IProps) {
   const axes = [
     { primary: true, type: 'time', position: 'bottom' },
     { type: 'linear', position: 'left' },
@@ -20,7 +24,7 @@ function Chart() {
     async function loadChartData() {
       const newChartData = await ChartDataHelper.getData(
         ChartTypes.Top,
-        ChartMetrics.Confirmed,
+        props.chartMetric,
         10,
         10
       );
@@ -30,7 +34,7 @@ function Chart() {
     }
 
     loadChartData();
-  }, []);
+  }, [props.chartMetric]);
 
   return (
     // A react-chart hyper-responsively and continuously fills the available
