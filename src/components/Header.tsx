@@ -6,11 +6,10 @@ function Header() {
     <header>
       <Navbar className="bp3-dark">
         <Navbar.Group align={Alignment.LEFT}>
-          {/* TODO: Update title */}
-          <Navbar.Heading>React App</Navbar.Heading>
+          <Navbar.Heading>COVID-19 Charts</Navbar.Heading>
         </Navbar.Group>
         <Navbar.Group align={Alignment.RIGHT}>
-          <a href="https://github.com/bmaupin/ts-react-wip">
+          <a href="https://github.com/bmaupin/covid19-charts">
             {/* TODO: Use Github icon? */}
             <Button className="bp3-minimal" icon="git-repo" />
           </a>
