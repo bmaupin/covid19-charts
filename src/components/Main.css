@@ -1,7 +1,12 @@
+.ButtonGroup {
+  padding: 1em;
+}
+
 .Main {
   display: flex;
+  flex-direction: column;
   /* Center items horizontally */
-  justify-content: center;
+  align-items: center;
 
   padding: 2em;
 }
