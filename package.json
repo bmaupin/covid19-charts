@@ -20,7 +20,7 @@
   "devDependencies": {
     "gh-pages": "^2.2.0"
   },
-  "homepage": "https://bmaupin.github.io/covid19-charts/",
+  "homepage": "https://bmaupin.github.io/covid19-trends/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
