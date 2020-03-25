@@ -41,8 +41,8 @@ function Chart(props: IProps) {
     // space of its parent element automatically
     <div
       style={{
-        width: '400px',
-        height: '300px',
+        width: '800px',
+        height: '600px',
       }}
     >
       {/* The axes won't show correctly if the chart is rendered before the data is loaded */}
