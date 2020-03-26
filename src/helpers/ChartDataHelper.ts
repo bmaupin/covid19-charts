@@ -1,3 +1,5 @@
+import colours from './colours';
+
 const API_URL = 'https://pomber.github.io/covid19/timeseries.json';
 
 // TODO: is this the best term?
@@ -18,9 +20,10 @@ interface ChartDatum {
   y: number;
 }
 
-interface ChartSeries {
+export interface ChartSeries {
   label: string;
   data: ChartDatum[];
+  colour: string;
 }
 
 export interface ChartData extends Array<ChartSeries> {}
@@ -95,6 +98,7 @@ export class ChartDataHelper {
     for (const country of sortedCountries) {
       let chartSeries = {} as ChartSeries;
       chartSeries.label = country;
+      chartSeries.colour = colours[country];
 
       chartSeries.data = [];
 

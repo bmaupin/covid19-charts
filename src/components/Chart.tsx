@@ -20,6 +20,12 @@ function Chart(props: IProps) {
   const [chartData, setChartData] = useState<ChartData | null>(null);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
 
+  const _getSeriesStyle = (series: any) => {
+    return {
+      color: series.originalSeries.colour,
+    };
+  };
+
   useEffect(() => {
     async function loadChartData() {
       const newChartData = await ChartDataHelper.getData(
@@ -46,7 +52,14 @@ function Chart(props: IProps) {
       }}
     >
       {/* The axes won't show correctly if the chart is rendered before the data is loaded */}
-      {isDataLoaded && <ReactChart data={chartData} axes={axes} tooltip />}
+      {isDataLoaded && (
+        <ReactChart
+          axes={axes}
+          data={chartData}
+          getSeriesStyle={_getSeriesStyle}
+          tooltip
+        />
+      )}
     </div>
   );
 }

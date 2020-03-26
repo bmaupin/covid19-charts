@@ -2,3 +2,6 @@ The following files are from or contain content from external sources:
 
 src/components/Header.tsx
 Source: https://github.com/logos
+
+scripts/generateColours.ts
+Source: https://material.io/design/color/
