@@ -6,6 +6,7 @@ import {
   VerticalGridLines,
   XAxis,
   YAxis,
+  Crosshair,
 } from 'react-vis';
 
 import '../../node_modules/react-vis/dist/style.css';
@@ -24,7 +25,21 @@ interface IProps {
 
 function Chart(props: IProps) {
   const [chartData, setChartData] = useState<ChartData | null>(null);
+  const [crosshairValues, setCrossHairValues] = useState<any[] | null>(null);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
+
+  /**
+   * Event handler for chart onNearestX.
+   *
+   * This will set the crosshair values based on the x coordinate closest to the user's mouse.
+   * @param {Object} value Selected value.
+   * @param {number} index Index of the series.
+   * @private
+   */
+  const _onNearestX = (value: any, { index }: any) => {
+    console.log('_onNearestX');
+    setCrossHairValues(chartData!.map(entry => entry.data[index]));
+  };
 
   const _xAxisLabelFormatter = (tick: number): string => {
     return new Date(chartData![0].dates[tick]).toLocaleString('default', {
@@ -86,8 +101,10 @@ function Chart(props: IProps) {
               // Don't render null y values; by default react-vis will convert them to 0
               getNull={d => d.y !== null}
               key={entry.title}
+              onNearestX={_onNearestX}
             />
           ))}
+          <Crosshair values={crosshairValues!} />
         </FlexibleWidthXYPlot>
       )}
     </div>
