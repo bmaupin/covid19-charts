@@ -5,5 +5,5 @@ Simple charts showing COVID-19 trends
 - [TypeScript](https://www.typescriptlang.org/)
 - [React](https://reactjs.org/)
 - [Blueprint](https://blueprintjs.com/)
-- https://github.com/tannerlinsley/react-charts
+- [React-vis](https://uber.github.io/react-vis/)
 - https://github.com/pomber/covid19
