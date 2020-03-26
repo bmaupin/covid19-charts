@@ -1,6 +1,0 @@
-.ChartContainer {
-  /* This is kind of arbitrary, but 3:2 seems to be a good max ratio of width:height */
-  max-width: 900px;
-  /* This is necessary for the FlexibleWidthXYPlot */
-  width: 100%;
-}

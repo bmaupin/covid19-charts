@@ -1,5 +1,8 @@
 const API_URL = 'https://pomber.github.io/covid19/timeseries.json';
 
+// TODO: is this the best term?
+// Alternatives: attribute, measurement, characteristic, variable, factor, statistic, measure,
+// criterion, property, element, metric, criteria
 export enum ChartMetrics {
   Confirmed = 'confirmed',
   Deaths = 'deaths',
@@ -11,14 +14,13 @@ export enum ChartTypes {
 }
 
 interface ChartDatum {
-  x: number;
+  x: Date;
   y: number;
 }
 
 interface ChartSeries {
+  label: string;
   data: ChartDatum[];
-  dates: Date[];
-  title: string;
 }
 
 export interface ChartData extends Array<ChartSeries> {}
@@ -77,8 +79,7 @@ export class ChartDataHelper {
     );
 
     // TODO
-    console.log('apiData: ', apiData);
-    console.log('chartData: ', chartData);
+    console.log(apiData);
 
     return chartData;
   }
@@ -93,19 +94,19 @@ export class ChartDataHelper {
 
     for (const country of sortedCountries) {
       let chartSeries = {} as ChartSeries;
+      chartSeries.label = country;
+
       chartSeries.data = [];
-      chartSeries.dates = [];
-      chartSeries.title = country;
 
       // TODO: this assumes the data will always be in order
-      for (let i = 0; i < numDates; i++) {
-        const countryData =
-          apiData[country][apiData[country].length - numDates + i];
+      for (const countryData of apiData[country].slice(
+        apiData[country].length - numDates,
+        apiData[country].length
+      )) {
         chartSeries.data.push({
-          x: i,
+          x: new Date(countryData.date),
           y: countryData[chartMetric],
         });
-        chartSeries.dates.push(new Date(countryData.date));
       }
 
       chartData.push(chartSeries);
