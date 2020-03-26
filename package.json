@@ -22,6 +22,7 @@
   },
   "homepage": "https://bmaupin.github.io/covid19-trends/",
   "scripts": {
+    "dev": "npm run start",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
