@@ -5,12 +5,12 @@ import {
   LineMarkSeries,
   VerticalGridLines,
   XAxis,
-  XYPlot,
   YAxis,
 } from 'react-vis';
 
 import '../../node_modules/react-vis/dist/style.css';
 
+import './Chart.css';
 import {
   ChartMetrics,
   ChartDataHelper,
@@ -61,17 +61,16 @@ function Chart(props: IProps) {
   }, [props.chartMetric]);
 
   return (
-    <div>
+    <div className="ChartContainer">
       {/* Don't render the chart until the data is loaded */}
       {isDataLoaded && (
-        <XYPlot
+        <FlexibleWidthXYPlot
           height={600}
           // Prevent tick labels from being cut off (https://github.com/uber/react-vis/issues/400)
           margin={{
             left: 40,
             right: 40,
           }}
-          width={800}
         >
           <VerticalGridLines />
           <HorizontalGridLines />
@@ -89,7 +88,7 @@ function Chart(props: IProps) {
               key={entry.title}
             />
           ))}
-        </XYPlot>
+        </FlexibleWidthXYPlot>
       )}
     </div>
   );
