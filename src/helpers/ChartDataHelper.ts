@@ -66,7 +66,7 @@ export class ChartDataHelper {
     numDates: number
   ): Promise<ChartData> {
     const apiData = await ChartDataHelper.fetchData();
-    const sortedCountries = await ChartDataHelper.getTopChartCountries(
+    const sortedCountries = ChartDataHelper.getTopChartCountries(
       apiData,
       chartMetric,
       numCountries
@@ -115,11 +115,11 @@ export class ChartDataHelper {
     return chartData;
   }
 
-  static async getTopChartCountries(
+  static getTopChartCountries(
     apiData: ApiData,
     chartMetric: ChartMetrics,
     numCountries: number
-  ): Promise<Array<string>> {
+  ): Array<string> {
     const latestDate = apiData['Canada'][apiData['Canada'].length - 1].date;
 
     const sortedCountries = Object.keys(apiData).sort(function(a, b) {
