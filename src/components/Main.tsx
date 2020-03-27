@@ -3,12 +3,17 @@ import React, { useState } from 'react';
 import './Main.css';
 import Chart from './Chart';
 import { Button, ButtonGroup } from '@blueprintjs/core';
-import { ChartMetrics } from '../helpers/ChartDataHelper';
+import { ChartIntervals, ChartMetrics } from '../helpers/ChartDataHelper';
 
 function Main() {
+  const [chartInterval, setChartInterval] = useState(ChartIntervals.Daily);
   const [chartMetric, setChartMetric] = useState(ChartMetrics.Active);
 
-  function handleChartMetricButtonClick(newMetric: ChartMetrics) {
+  function _handleChartIntervalButtonClick(newInterval: ChartIntervals) {
+    setChartInterval(newInterval);
+  }
+
+  function _handleChartMetricButtonClick(newMetric: ChartMetrics) {
     setChartMetric(newMetric);
   }
 
@@ -17,30 +22,53 @@ function Main() {
       <ButtonGroup className="ButtonGroup">
         <Button
           active={chartMetric === ChartMetrics.Active}
-          onClick={() => handleChartMetricButtonClick(ChartMetrics.Active)}
+          onClick={() => _handleChartMetricButtonClick(ChartMetrics.Active)}
         >
           Active
         </Button>
         <Button
           active={chartMetric === ChartMetrics.Confirmed}
-          onClick={() => handleChartMetricButtonClick(ChartMetrics.Confirmed)}
+          onClick={() => _handleChartMetricButtonClick(ChartMetrics.Confirmed)}
         >
           Confirmed
         </Button>
         <Button
           active={chartMetric === ChartMetrics.Deaths}
-          onClick={() => handleChartMetricButtonClick(ChartMetrics.Deaths)}
+          onClick={() => _handleChartMetricButtonClick(ChartMetrics.Deaths)}
         >
           Deaths
         </Button>
         <Button
           active={chartMetric === ChartMetrics.Recovered}
-          onClick={() => handleChartMetricButtonClick(ChartMetrics.Recovered)}
+          onClick={() => _handleChartMetricButtonClick(ChartMetrics.Recovered)}
         >
           Recovered
         </Button>
       </ButtonGroup>
-      <Chart chartMetric={chartMetric} />
+      <Chart chartInterval={chartInterval} chartMetric={chartMetric} />
+      <ButtonGroup className="ButtonGroup">
+        <Button
+          active={chartInterval === ChartIntervals.Daily}
+          onClick={() => _handleChartIntervalButtonClick(ChartIntervals.Daily)}
+        >
+          Daily
+        </Button>
+        <Button
+          active={chartInterval === ChartIntervals.Weekly}
+          onClick={() => _handleChartIntervalButtonClick(ChartIntervals.Weekly)}
+        >
+          Weekly
+        </Button>
+        {/* TODO: Enable this later; the data starts on 2020-01-22 so this isn't very useful right now */}
+        {/* <Button
+          active={chartInterval === ChartIntervals.Monthly}
+          onClick={() =>
+            _handleChartIntervalButtonClick(ChartIntervals.Monthly)
+          }
+        >
+          Monthly
+        </Button> */}
+      </ButtonGroup>
     </div>
   );
 }
