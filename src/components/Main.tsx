@@ -6,7 +6,7 @@ import { Button, ButtonGroup } from '@blueprintjs/core';
 import { ChartMetrics } from '../helpers/ChartDataHelper';
 
 function Main() {
-  const [chartMetric, setChartMetric] = useState(ChartMetrics.Confirmed);
+  const [chartMetric, setChartMetric] = useState(ChartMetrics.Active);
 
   function handleChartMetricButtonClick(newMetric: ChartMetrics) {
     setChartMetric(newMetric);
@@ -15,6 +15,12 @@ function Main() {
   return (
     <div className="Main">
       <ButtonGroup className="ButtonGroup">
+        <Button
+          active={chartMetric === ChartMetrics.Active}
+          onClick={() => handleChartMetricButtonClick(ChartMetrics.Active)}
+        >
+          Active
+        </Button>
         <Button
           active={chartMetric === ChartMetrics.Confirmed}
           onClick={() => handleChartMetricButtonClick(ChartMetrics.Confirmed)}
