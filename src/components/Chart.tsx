@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Chart as ReactChart } from 'react-charts';
+
+import './Chart.css';
 import {
   ChartMetrics,
   ChartDataHelper,
@@ -45,12 +47,7 @@ function Chart(props: IProps) {
   return (
     // A react-chart hyper-responsively and continuously fills the available
     // space of its parent element automatically
-    <div
-      style={{
-        width: '800px',
-        height: '600px',
-      }}
-    >
+    <div className="ChartContainer">
       {/* The axes won't show correctly if the chart is rendered before the data is loaded */}
       {isDataLoaded && (
         <ReactChart
