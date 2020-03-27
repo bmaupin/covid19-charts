@@ -69,15 +69,21 @@ export class ChartDataHelper {
     numDates: number
   ): Promise<ChartData> {
     const apiData = await ChartDataHelper.fetchData();
+    const latestDateWithData = ChartDataHelper.getLatestDateWithData(
+      apiData,
+      chartMetric
+    );
     const sortedCountries = ChartDataHelper.getTopChartCountries(
       apiData,
       chartMetric,
+      latestDateWithData,
       numCountries
     );
     const chartData = ChartDataHelper.formatDataForChart(
       apiData,
       sortedCountries,
       chartMetric,
+      latestDateWithData,
       numDates
     );
 
@@ -87,17 +93,34 @@ export class ChartDataHelper {
     return chartData;
   }
 
+  static getLatestDateWithData(
+    apiData: ApiData,
+    chartMetric: ChartMetrics
+  ): string | undefined {
+    let i = 1;
+    for (const country in apiData) {
+      console.log(country);
+      for (; i <= apiData[country].length; i++) {
+        const countryData = apiData[country][apiData[country].length - i];
+        if (countryData[chartMetric] !== null) {
+          return countryData.date;
+        }
+      }
+    }
+  }
+
   static getTopChartCountries(
     apiData: ApiData,
     chartMetric: ChartMetrics,
+    latestDateWithData: string | undefined,
     numCountries: number
   ): Array<string> {
-    const latestDate = apiData['Canada'][apiData['Canada'].length - 1].date;
-
     const sortedCountries = Object.keys(apiData).sort(function(a, b) {
       return (
-        apiData[b].find(item => item.date === latestDate)![chartMetric] -
-        apiData[a].find(item => item.date === latestDate)![chartMetric]
+        apiData[b].find(item => item.date === latestDateWithData)![
+          chartMetric
+        ] -
+        apiData[a].find(item => item.date === latestDateWithData)![chartMetric]
       );
     });
 
@@ -108,6 +131,7 @@ export class ChartDataHelper {
     apiData: ApiData,
     sortedCountries: Array<string>,
     chartMetric: ChartMetrics,
+    latestDateWithData: string | undefined,
     numDates: number
   ): ChartData {
     let chartData = [] as ChartData;
@@ -119,10 +143,14 @@ export class ChartDataHelper {
 
       chartSeries.data = [];
 
+      const indexOfLatestDate = apiData[country].findIndex(
+        countryData => countryData.date === latestDateWithData
+      );
+
       // TODO: this assumes the data will always be in order
       for (const countryData of apiData[country].slice(
-        apiData[country].length - numDates,
-        apiData[country].length
+        indexOfLatestDate + 1 - numDates,
+        indexOfLatestDate + 1
       )) {
         chartSeries.data.push({
           x: new Date(countryData.date),
