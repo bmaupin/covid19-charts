@@ -7,9 +7,11 @@ import {
   ChartDataHelper,
   ChartTypes,
   ChartData,
+  ChartIntervals,
 } from '../helpers/ChartDataHelper';
 
 interface IProps {
+  chartInterval: ChartIntervals;
   chartMetric: ChartMetrics;
 }
 
@@ -33,6 +35,7 @@ function Chart(props: IProps) {
       const newChartData = await ChartDataHelper.getData(
         ChartTypes.Top,
         props.chartMetric,
+        props.chartInterval,
         10,
         10
       );
@@ -42,7 +45,7 @@ function Chart(props: IProps) {
     }
 
     loadChartData();
-  }, [props.chartMetric]);
+  }, [props.chartInterval, props.chartMetric]);
 
   return (
     // A react-chart hyper-responsively and continuously fills the available

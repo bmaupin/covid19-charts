@@ -2,9 +2,13 @@ import colours from './colours';
 
 const API_URL = 'https://pomber.github.io/covid19/timeseries.json';
 
-// TODO: is this the best term?
-// Alternatives: attribute, measurement, characteristic, variable, factor, statistic, measure,
-// criterion, property, element, metric, criteria
+export enum ChartIntervals {
+  Daily = 1,
+  Weekly = 7,
+  // Not technically a month but it's a much simpler implementation and should be good enough...
+  Monthly = 30,
+}
+
 export enum ChartMetrics {
   Active = 'active',
   Confirmed = 'confirmed',
@@ -44,17 +48,24 @@ export class ChartDataHelper {
   static async getData(
     chartType: ChartTypes,
     chartMetric: ChartMetrics,
+    chartInterval: ChartIntervals,
     numCountries: number,
     numDates: number
   ): Promise<ChartData> {
     switch (chartType) {
       default:
-        return await this.getTopChartData(chartMetric, numCountries, numDates);
+        return await this.getTopChartData(
+          chartMetric,
+          chartInterval,
+          numCountries,
+          numDates
+        );
     }
   }
 
   private static async getTopChartData(
     chartMetric: ChartMetrics,
+    chartInterval: ChartIntervals,
     numCountries: number,
     numDates: number
   ): Promise<ChartData> {
@@ -70,6 +81,7 @@ export class ChartDataHelper {
       apiData,
       sortedCountries,
       chartMetric,
+      chartInterval,
       latestDateWithData,
       numDates
     );
@@ -147,6 +159,7 @@ export class ChartDataHelper {
     apiData: ApiData,
     sortedCountries: Array<string>,
     chartMetric: ChartMetrics,
+    chartInterval: ChartIntervals,
     latestDateWithData: string | undefined,
     numDates: number
   ): ChartData {
@@ -164,20 +177,22 @@ export class ChartDataHelper {
       );
 
       // TODO: this assumes the data will always be in order
-      for (const countryData of apiData[country].slice(
-        indexOfLatestDate + 1 - numDates,
-        indexOfLatestDate + 1
-      )) {
-        let yValue;
-        if (chartMetric === ChartMetrics.Active) {
-          yValue = this.calculateActiveMetric(countryData);
-        } else {
-          yValue = countryData[chartMetric];
+      for (let i = 0; i < numDates; i++) {
+        const countryData =
+          apiData[country][indexOfLatestDate - i * chartInterval];
+        // countryData could be undefined if we try to get data before the first date due to a large interval
+        if (countryData) {
+          let yValue;
+          if (chartMetric === ChartMetrics.Active) {
+            yValue = this.calculateActiveMetric(countryData);
+          } else {
+            yValue = countryData[chartMetric];
+          }
+          chartSeries.data.push({
+            x: new Date(countryData.date),
+            y: yValue,
+          });
         }
-        chartSeries.data.push({
-          x: new Date(countryData.date),
-          y: yValue,
-        });
       }
 
       chartData.push(chartSeries);
