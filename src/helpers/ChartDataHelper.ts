@@ -6,6 +6,7 @@ const API_URL = 'https://pomber.github.io/covid19/timeseries.json';
 // Alternatives: attribute, measurement, characteristic, variable, factor, statistic, measure,
 // criterion, property, element, metric, criteria
 export enum ChartMetrics {
+  Active = 'active',
   Confirmed = 'confirmed',
   Deaths = 'deaths',
   Recovered = 'recovered',
@@ -97,6 +98,10 @@ export class ChartDataHelper {
     apiData: ApiData,
     chartMetric: ChartMetrics
   ): string | undefined {
+    if (chartMetric === ChartMetrics.Active) {
+      chartMetric = ChartMetrics.Recovered;
+    }
+
     let i = 1;
     for (const country in apiData) {
       console.log(country);
@@ -109,6 +114,10 @@ export class ChartDataHelper {
     }
   }
 
+  static calculateActiveMetric(countryData: ApiCountryData): number {
+    return countryData.confirmed - countryData.recovered;
+  }
+
   static getTopChartCountries(
     apiData: ApiData,
     chartMetric: ChartMetrics,
@@ -116,12 +125,25 @@ export class ChartDataHelper {
     numCountries: number
   ): Array<string> {
     const sortedCountries = Object.keys(apiData).sort(function(a, b) {
-      return (
-        apiData[b].find(item => item.date === latestDateWithData)![
-          chartMetric
-        ] -
-        apiData[a].find(item => item.date === latestDateWithData)![chartMetric]
-      );
+      if (chartMetric === ChartMetrics.Active) {
+        return (
+          ChartDataHelper.calculateActiveMetric(
+            apiData[b].find(item => item.date === latestDateWithData)!
+          ) -
+          ChartDataHelper.calculateActiveMetric(
+            apiData[a].find(item => item.date === latestDateWithData)!
+          )
+        );
+      } else {
+        return (
+          apiData[b].find(item => item.date === latestDateWithData)![
+            chartMetric
+          ] -
+          apiData[a].find(item => item.date === latestDateWithData)![
+            chartMetric
+          ]
+        );
+      }
     });
 
     return sortedCountries.slice(0, numCountries);
@@ -152,9 +174,15 @@ export class ChartDataHelper {
         indexOfLatestDate + 1 - numDates,
         indexOfLatestDate + 1
       )) {
+        let yValue;
+        if (chartMetric === ChartMetrics.Active) {
+          yValue = this.calculateActiveMetric(countryData);
+        } else {
+          yValue = countryData[chartMetric];
+        }
         chartSeries.data.push({
           x: new Date(countryData.date),
-          y: countryData[chartMetric],
+          y: yValue,
         });
       }
 
