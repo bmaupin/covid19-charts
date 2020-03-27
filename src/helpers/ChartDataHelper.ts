@@ -40,14 +40,7 @@ interface ApiData {
   [key: string]: Array<ApiCountryData>;
 }
 
-// TODO: do we really need a class here?
 export class ChartDataHelper {
-  static async fetchData() {
-    const response = await fetch(API_URL);
-
-    return response.json();
-  }
-
   static async getData(
     chartType: ChartTypes,
     chartMetric: ChartMetrics,
@@ -56,31 +49,24 @@ export class ChartDataHelper {
   ): Promise<ChartData> {
     switch (chartType) {
       default:
-        return await ChartDataHelper.getTopChartData(
-          chartMetric,
-          numCountries,
-          numDates
-        );
+        return await this.getTopChartData(chartMetric, numCountries, numDates);
     }
   }
 
-  static async getTopChartData(
+  private static async getTopChartData(
     chartMetric: ChartMetrics,
     numCountries: number,
     numDates: number
   ): Promise<ChartData> {
-    const apiData = await ChartDataHelper.fetchData();
-    const latestDateWithData = ChartDataHelper.getLatestDateWithData(
-      apiData,
-      chartMetric
-    );
-    const sortedCountries = ChartDataHelper.getTopChartCountries(
+    const apiData = await this.fetchData();
+    const latestDateWithData = this.getLatestDateWithData(apiData, chartMetric);
+    const sortedCountries = this.getTopChartCountries(
       apiData,
       chartMetric,
       latestDateWithData,
       numCountries
     );
-    const chartData = ChartDataHelper.formatDataForChart(
+    const chartData = this.formatDataForChart(
       apiData,
       sortedCountries,
       chartMetric,
@@ -94,7 +80,13 @@ export class ChartDataHelper {
     return chartData;
   }
 
-  static getLatestDateWithData(
+  private static async fetchData() {
+    const response = await fetch(API_URL);
+
+    return response.json();
+  }
+
+  private static getLatestDateWithData(
     apiData: ApiData,
     chartMetric: ChartMetrics
   ): string | undefined {
@@ -114,23 +106,25 @@ export class ChartDataHelper {
     }
   }
 
-  static calculateActiveMetric(countryData: ApiCountryData): number {
-    return countryData.confirmed - countryData.recovered;
+  private static calculateActiveMetric(countryData: ApiCountryData): number {
+    return (
+      countryData[ChartMetrics.Confirmed] - countryData[ChartMetrics.Recovered]
+    );
   }
 
-  static getTopChartCountries(
+  private static getTopChartCountries(
     apiData: ApiData,
     chartMetric: ChartMetrics,
     latestDateWithData: string | undefined,
     numCountries: number
   ): Array<string> {
-    const sortedCountries = Object.keys(apiData).sort(function(a, b) {
+    const sortedCountries = Object.keys(apiData).sort((a, b) => {
       if (chartMetric === ChartMetrics.Active) {
         return (
-          ChartDataHelper.calculateActiveMetric(
+          this.calculateActiveMetric(
             apiData[b].find(item => item.date === latestDateWithData)!
           ) -
-          ChartDataHelper.calculateActiveMetric(
+          this.calculateActiveMetric(
             apiData[a].find(item => item.date === latestDateWithData)!
           )
         );
@@ -149,7 +143,7 @@ export class ChartDataHelper {
     return sortedCountries.slice(0, numCountries);
   }
 
-  static formatDataForChart(
+  private static formatDataForChart(
     apiData: ApiData,
     sortedCountries: Array<string>,
     chartMetric: ChartMetrics,
