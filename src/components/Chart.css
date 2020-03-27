@@ -1,6 +1,8 @@
 .ChartContainer {
-  height: 600px;
-  width: 800px;
+  height: 75vh;
+  max-height: 600px;
+  max-width: 900px;
+  width: 80vw;
 }
 
 .ChartContainer svg {
