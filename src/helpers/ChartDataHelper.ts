@@ -82,9 +82,26 @@ export class ChartDataHelper {
     );
 
     // TODO
-    console.log(apiData);
+    console.log('apiData: ', apiData);
 
     return chartData;
+  }
+
+  static getTopChartCountries(
+    apiData: ApiData,
+    chartMetric: ChartMetrics,
+    numCountries: number
+  ): Array<string> {
+    const latestDate = apiData['Canada'][apiData['Canada'].length - 1].date;
+
+    const sortedCountries = Object.keys(apiData).sort(function(a, b) {
+      return (
+        apiData[b].find(item => item.date === latestDate)![chartMetric] -
+        apiData[a].find(item => item.date === latestDate)![chartMetric]
+      );
+    });
+
+    return sortedCountries.slice(0, numCountries);
   }
 
   static formatDataForChart(
@@ -117,22 +134,5 @@ export class ChartDataHelper {
     }
 
     return chartData;
-  }
-
-  static getTopChartCountries(
-    apiData: ApiData,
-    chartMetric: ChartMetrics,
-    numCountries: number
-  ): Array<string> {
-    const latestDate = apiData['Canada'][apiData['Canada'].length - 1].date;
-
-    const sortedCountries = Object.keys(apiData).sort(function(a, b) {
-      return (
-        apiData[b].find(item => item.date === latestDate)![chartMetric] -
-        apiData[a].find(item => item.date === latestDate)![chartMetric]
-      );
-    });
-
-    return sortedCountries.slice(0, numCountries);
   }
 }
