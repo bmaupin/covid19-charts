@@ -1,5 +1,7 @@
 .ButtonGroup {
   padding: 1em;
+  /* Make sure buttons never cover up tooltips. This can particularly happen on mobile when the chart is smaller */
+  z-index: 0;
 }
 
 .Main {
