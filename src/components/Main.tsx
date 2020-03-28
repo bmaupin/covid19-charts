@@ -59,15 +59,17 @@ function Main() {
         >
           Weekly
         </Button>
-        {/* TODO: Enable this later; the data starts on 2020-01-22 so this isn't very useful right now */}
-        {/* <Button
-          active={chartInterval === ChartIntervals.Monthly}
-          onClick={() =>
-            _handleChartIntervalButtonClick(ChartIntervals.Monthly)
-          }
-        >
-          Monthly
-        </Button> */}
+        {/* Enable the Monthly interval button after we have about 3 months of data (the data starts on 2020-01-22) */}
+        {new Date() > new Date('2020-04-22') && (
+          <Button
+            active={chartInterval === ChartIntervals.Monthly}
+            onClick={() =>
+              _handleChartIntervalButtonClick(ChartIntervals.Monthly)
+            }
+          >
+            Monthly
+          </Button>
+        )}
       </ButtonGroup>
     </div>
   );
