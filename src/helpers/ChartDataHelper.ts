@@ -93,9 +93,46 @@ export class ChartDataHelper {
   }
 
   private static async fetchData() {
-    const response = await fetch(API_URL);
+    const cache = await this.getCache();
+    let response = await cache.match(API_URL);
+    if (typeof response === 'undefined') {
+      await cache.add(API_URL);
+      response = await cache.match(API_URL);
+    }
 
-    return response.json();
+    return response!.json();
+  }
+
+  private static async getCache(): Promise<Cache> {
+    // If there's a cache matching the current date in UTC, return it in order to avoid calling the API
+    const cacheDateString = this.getDateStringForCache();
+    if (await caches.has(cacheDateString)) {
+      return await caches.open(cacheDateString);
+    }
+
+    // Otherwise, delete all the old caches and then create a new one
+    await this.deleteAllCaches();
+    return await caches.open(cacheDateString);
+  }
+
+  /*
+   * This will return a date string (year, month, day) in UTC for the current date in UTC, minus 30 minutes. This will
+   * ensure the cache gets updated after 00:30. The data from Johns Hopkins refreshes around 23:59 UTC; the data from
+   * https://pomber.github.io/covid19/ seems to be updated about 15 minutes later.
+   */
+  private static getDateStringForCache(): string {
+    // Subtract 30 minutes from the current time in UTC
+    let now = new Date();
+    now.setUTCMinutes(now.getUTCMinutes() - 30);
+
+    // Convert to yyyy-mm-dd
+    return now.toISOString().slice(0, 10);
+  }
+
+  private static async deleteAllCaches() {
+    for (let cacheName of await caches.keys()) {
+      await caches.delete(cacheName);
+    }
   }
 
   private static getLatestDateWithData(
