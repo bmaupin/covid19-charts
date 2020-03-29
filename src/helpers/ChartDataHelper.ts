@@ -13,6 +13,7 @@ export enum ChartMetrics {
   Active = 'active',
   Confirmed = 'confirmed',
   Deaths = 'deaths',
+  New = 'new',
   Recovered = 'recovered',
 }
 
@@ -74,6 +75,7 @@ export class ChartDataHelper {
     const sortedCountries = this.getTopChartCountries(
       apiData,
       chartMetric,
+      chartInterval,
       latestDateWithData,
       numCountries
     );
@@ -85,9 +87,6 @@ export class ChartDataHelper {
       latestDateWithData,
       numDates
     );
-
-    // TODO
-    console.log('apiData: ', apiData);
 
     return chartData;
   }
@@ -104,6 +103,8 @@ export class ChartDataHelper {
   ): string | undefined {
     if (chartMetric === ChartMetrics.Active) {
       chartMetric = ChartMetrics.Recovered;
+    } else if (chartMetric === ChartMetrics.New) {
+      chartMetric = ChartMetrics.Confirmed;
     }
 
     let i = 1;
@@ -119,14 +120,28 @@ export class ChartDataHelper {
   }
 
   private static calculateActiveMetric(countryData: ApiCountryData): number {
-    return (
-      countryData[ChartMetrics.Confirmed] - countryData[ChartMetrics.Recovered]
-    );
+    return countryData.confirmed - countryData.recovered;
+  }
+
+  private static calculateNewMetric(
+    apiData: ApiData,
+    country: string,
+    index: number,
+    interval: ChartIntervals
+  ) {
+    let previousValue = 0;
+    const previousIndex = index - 1 * interval;
+    if (previousIndex >= 0) {
+      previousValue = apiData[country][previousIndex].confirmed;
+    }
+
+    return apiData[country][index].confirmed - previousValue;
   }
 
   private static getTopChartCountries(
     apiData: ApiData,
     chartMetric: ChartMetrics,
+    chartInterval: ChartIntervals,
     latestDateWithData: string | undefined,
     numCountries: number
   ): Array<string> {
@@ -139,6 +154,19 @@ export class ChartDataHelper {
           this.calculateActiveMetric(
             apiData[a].find(item => item.date === latestDateWithData)!
           )
+        );
+      } else if (chartMetric === ChartMetrics.New) {
+        const indexOfLatestDate = apiData[b].findIndex(
+          countryData => countryData.date === latestDateWithData
+        );
+        return (
+          this.calculateNewMetric(
+            apiData,
+            b,
+            indexOfLatestDate,
+            chartInterval
+          ) -
+          this.calculateNewMetric(apiData, a, indexOfLatestDate, chartInterval)
         );
       } else {
         return (
@@ -185,6 +213,13 @@ export class ChartDataHelper {
           let yValue;
           if (chartMetric === ChartMetrics.Active) {
             yValue = this.calculateActiveMetric(countryData);
+          } else if (chartMetric === ChartMetrics.New) {
+            yValue = this.calculateNewMetric(
+              apiData,
+              country,
+              indexOfLatestDate - i * chartInterval,
+              chartInterval
+            );
           } else {
             yValue = countryData[chartMetric];
           }
