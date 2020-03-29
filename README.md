@@ -8,7 +8,7 @@
 Simple charts showing COVID-19 trends
 
 - Data from [Johns Hopkins](https://github.com/CSSEGISandData/COVID-19) via https://github.com/pomber/covid19
-- Data is updated once a day around 23:59 UTC (https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data#update-frequency)
+- Data is updated once a day around 00:15 UTC (https://github.com/pomber/covid19/blob/master/.github/workflows/main.yml#L3)
 
 #### Built with
 
