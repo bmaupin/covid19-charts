@@ -1,3 +1,8 @@
+[![Build](https://github.com/bmaupin/covid19-trends/workflows/build/badge.svg)](https://github.com/bmaupin/covid19-trends/actions)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/bmaupin/covid19-trends/blob/master/LICENSE)
+
+---
+
 #### About
 
 Simple charts showing COVID-19 trends
