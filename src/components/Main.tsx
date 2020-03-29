@@ -7,7 +7,7 @@ import { ChartIntervals, ChartMetrics } from '../helpers/ChartDataHelper';
 
 function Main() {
   const [chartInterval, setChartInterval] = useState(ChartIntervals.Daily);
-  const [chartMetric, setChartMetric] = useState(ChartMetrics.Active);
+  const [chartMetric, setChartMetric] = useState(ChartMetrics.New);
 
   function _handleChartIntervalButtonClick(newInterval: ChartIntervals) {
     setChartInterval(newInterval);
@@ -20,6 +20,12 @@ function Main() {
   return (
     <div className="Main">
       <ButtonGroup className="ButtonGroup">
+        <Button
+          active={chartMetric === ChartMetrics.New}
+          onClick={() => _handleChartMetricButtonClick(ChartMetrics.New)}
+        >
+          New
+        </Button>
         <Button
           active={chartMetric === ChartMetrics.Active}
           onClick={() => _handleChartMetricButtonClick(ChartMetrics.Active)}
