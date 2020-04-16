@@ -153,15 +153,15 @@ export class ChartDataHelper {
       if (chartMetric === ChartMetrics.Active) {
         return (
           this.calculateActiveMetric(
-            apiData[b].find(item => item.date === latestDateWithData)!
+            apiData[b].find((item) => item.date === latestDateWithData)!
           ) -
           this.calculateActiveMetric(
-            apiData[a].find(item => item.date === latestDateWithData)!
+            apiData[a].find((item) => item.date === latestDateWithData)!
           )
         );
       } else if (chartMetric === ChartMetrics.New) {
         const indexOfLatestDate = apiData[b].findIndex(
-          countryData => countryData.date === latestDateWithData
+          (countryData) => countryData.date === latestDateWithData
         );
         return (
           this.calculateNewMetric(
@@ -174,10 +174,10 @@ export class ChartDataHelper {
         );
       } else {
         return (
-          apiData[b].find(item => item.date === latestDateWithData)![
+          apiData[b].find((item) => item.date === latestDateWithData)![
             chartMetric
           ] -
-          apiData[a].find(item => item.date === latestDateWithData)![
+          apiData[a].find((item) => item.date === latestDateWithData)![
             chartMetric
           ]
         );
@@ -205,7 +205,7 @@ export class ChartDataHelper {
       chartSeries.data = [];
 
       const indexOfLatestDate = apiData[country].findIndex(
-        countryData => countryData.date === latestDateWithData
+        (countryData) => countryData.date === latestDateWithData
       );
 
       // TODO: this assumes the data will always be in order
