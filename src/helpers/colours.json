@@ -161,7 +161,7 @@
   "Bhutan": "#C2185B",
   "Mauritania": "#1976D2",
   "Nicaragua": "#388E3C",
-  "Belize": "#FFA000",
+  "Germany": "#FFA000",
   "Guinea-Bissau": "#616161",
   "Mali": "#7B1FA2",
   "Saint Kitts and Nevis": "#0288D1",
@@ -171,5 +171,17 @@
   "Grenada": "#0097A7",
   "Timor-Leste": "#AFB42B",
   "Libya": "#E64A19",
-  "West Bank and Gaza": "#EF9A9A"
+  "West Bank and Gaza": "#EF9A9A",
+  "Belize": "#9FA8DA",
+  "Kosovo": "#80CBC4",
+  "Burma": "#FFF59D",
+  "Malawi": "#BCAAA4",
+  "Botswana": "#F48FB1",
+  "Sierra Leone": "#90CAF9",
+  "MS Zaandam": "#A5D6A7",
+  "Western Sahara": "#FFE082",
+  "Burundi": "#EEEEEE",
+  "South Sudan": "#CE93D8",
+  "Sao Tome and Principe": "#81D4FA",
+  "Yemen": "#C5E1A5"
 }
