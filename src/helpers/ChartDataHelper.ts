@@ -1,4 +1,8 @@
-import colours from './colours.json';
+interface Colours {
+  [key: string]: string;
+}
+
+const colours: Colours = require('./colours.json');
 
 const API_URL = 'https://pomber.github.io/covid19/timeseries.json';
 
