@@ -1,7 +1,13 @@
-// Run using: npx ts-node --compiler-options '{"isolatedModules": false}' scripts/generateColours.ts
+// Run using: npx ts-node --compiler-options '{"isolatedModules": false}' scripts/generateColours.ts | sponge src/helpers/colours.json
 
 const https = require('https');
 const { promisify } = require('util');
+
+interface Colours {
+  [key: string]: string;
+}
+
+const existingColours: Colours = require('../src/helpers/colours.json');
 
 function generateColoursObject() {
   // Copied from https://material.io/design/color/
@@ -130,7 +136,7 @@ function generateColourList() {
 function getTopChartCountries(apiData: any, chartMetric: string) {
   const latestDate = apiData['Canada'][apiData['Canada'].length - 1].date;
 
-  const sortedCountries = Object.keys(apiData).sort(function(a, b) {
+  const sortedCountries = Object.keys(apiData).sort(function (a, b) {
     return (
       apiData[b].find((item: { date: string }) => item.date === latestDate)[
         chartMetric
@@ -171,14 +177,22 @@ function fetchData() {
 async function generateColoursByCountry() {
   const colourList = generateColourList();
   const apiData = await fetchData();
+  const lastUsedColourIndex = Object.keys(existingColours).length;
 
-  let i = 0;
-  let coloursByCountry = {} as {
-    [key: string]: string;
-  };
+  let coloursByCountry: Colours = {};
+
+  for (const country in existingColours) {
+    coloursByCountry[country] = existingColours[country];
+
+    delete existingColours[country];
+  }
+
+  let i = 1;
   for (const country of getTopChartCountries(apiData, 'confirmed')) {
-    coloursByCountry[country] = colourList[i];
-    i++;
+    if (!coloursByCountry.hasOwnProperty(country)) {
+      coloursByCountry[country] = colourList[lastUsedColourIndex + i];
+      i++;
+    }
   }
 
   console.log(JSON.stringify(coloursByCountry, null, 2));
