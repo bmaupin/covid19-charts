@@ -1,4 +1,4 @@
-import colours from './colours';
+import colours from './colours.json';
 
 const API_URL = 'https://pomber.github.io/covid19/timeseries.json';
 
