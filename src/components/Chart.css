@@ -3,6 +3,9 @@
   max-height: 600px;
   max-width: 900px;
   width: 80vw;
+
+  /* Make sure chart tooltip is never covered by other elements (e.g. buttons) near the chart */
+  z-index: 10;
 }
 
 .ChartContainer svg {
