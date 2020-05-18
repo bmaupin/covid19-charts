@@ -6,7 +6,7 @@ import { Button, ButtonGroup } from '@blueprintjs/core';
 import { ChartIntervals, ChartMetrics } from '../helpers/ChartDataHelper';
 
 function Main() {
-  const [chartInterval, setChartInterval] = useState(ChartIntervals.Daily);
+  const [chartInterval, setChartInterval] = useState(ChartIntervals.Weekly);
   const [chartMetric, setChartMetric] = useState(ChartMetrics.New);
 
   function _handleChartIntervalButtonClick(newInterval: ChartIntervals) {
