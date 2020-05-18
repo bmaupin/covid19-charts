@@ -33,12 +33,6 @@ function Main() {
           Active
         </Button>
         <Button
-          active={chartMetric === ChartMetrics.Confirmed}
-          onClick={() => _handleChartMetricButtonClick(ChartMetrics.Confirmed)}
-        >
-          Confirmed
-        </Button>
-        <Button
           active={chartMetric === ChartMetrics.Deaths}
           onClick={() => _handleChartMetricButtonClick(ChartMetrics.Deaths)}
         >
@@ -49,6 +43,12 @@ function Main() {
           onClick={() => _handleChartMetricButtonClick(ChartMetrics.Recovered)}
         >
           Recovered
+        </Button>
+        <Button
+          active={chartMetric === ChartMetrics.Confirmed}
+          onClick={() => _handleChartMetricButtonClick(ChartMetrics.Confirmed)}
+        >
+          Confirmed
         </Button>
       </ButtonGroup>
       <Chart chartInterval={chartInterval} chartMetric={chartMetric} />
