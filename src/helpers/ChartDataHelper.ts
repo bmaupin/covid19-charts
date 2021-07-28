@@ -227,6 +227,13 @@ export class ChartDataHelper {
           } else {
             yValue = countryData[chartMetric];
           }
+
+          // Sometimes the number of total confirmed cases goes down, perhaps as a country corrects its data?
+          // Just set it to zero to keep from throwing the chart scale off
+          if (yValue < 0) {
+            yValue = 0;
+          }
+
           chartSeries.data.push({
             x: new Date(countryData.date),
             y: yValue,
