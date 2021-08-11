@@ -22,7 +22,6 @@ function Chart(props: IProps) {
   ];
 
   const [chartData, setChartData] = useState<ChartData | null>(null);
-  const [isDataLoaded, setIsDataLoaded] = useState(false);
 
   const _getSeriesStyle = (series: any) => {
     return {
@@ -41,7 +40,6 @@ function Chart(props: IProps) {
       );
 
       setChartData(newChartData);
-      setIsDataLoaded(true);
     }
 
     loadChartData();
@@ -51,15 +49,12 @@ function Chart(props: IProps) {
     // A react-chart hyper-responsively and continuously fills the available
     // space of its parent element automatically
     <div className="ChartContainer">
-      {/* The axes won't show correctly if the chart is rendered before the data is loaded */}
-      {isDataLoaded && (
-        <ReactChart
-          axes={axes}
-          data={chartData}
-          getSeriesStyle={_getSeriesStyle}
-          tooltip
-        />
-      )}
+      <ReactChart
+        axes={axes}
+        data={chartData ? chartData : {}}
+        getSeriesStyle={_getSeriesStyle}
+        tooltip
+      />
     </div>
   );
 }
