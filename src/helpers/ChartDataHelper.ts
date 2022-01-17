@@ -11,6 +11,8 @@ export enum ChartIntervals {
   Weekly = 7,
   // Not technically a month but it's a much simpler implementation and should be good enough...
   Monthly = 30,
+  Quarterly = 90,
+  Yearly = 365,
 }
 
 export enum ChartMetrics {
